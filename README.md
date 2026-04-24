@@ -68,6 +68,12 @@ set -g @tmux-dotbar-fg-prefix "#cba6f7"
 
 You can also set `@tmux-dotbar-bold-status` to use bold font in the statusbar, or `@tmux-dotbar-bold-current-window` to use bold font just for the active window.
 
+### Rounded prefix highlight
+When the tmux prefix is pressed, the session indicator highlights. By default the edges are square. To use rounded (powerline) edges instead:
+```
+set -g @tmux-dotbar-rounded true
+```
+
 ### Status bar
 You may feel the right part a bit empty. If you want, there's an option to display the current time there, you can enable it (disabled by default) in your `.tmux.conf`:
 ```
@@ -135,6 +141,7 @@ set -g @tmux-dotbar-maximized-icon "󰊓"
 set -g @tmux-dotbar-show-maximized-icon-for-all-tabs false
 set -g @tmux-dotbar-bold-status false
 set -g @tmux-dotbar-bold-current-window false
+set -g @tmux-dotbar-rounded false
 set -g @tmux-dotbar-ssh-enabled true
 set -g @tmux-dotbar-ssh-icon '󰌘'
 set -g @tmux-dotbar-ssh-icon-only false

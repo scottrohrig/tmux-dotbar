@@ -18,6 +18,7 @@ fg_prefix=$(get_tmux_option "@tmux-dotbar-fg-prefix" '#95E6CB')
 # Options
 bold_status=$(get_tmux_option "@tmux-dotbar-bold-status" false)
 bold_current_window=$(get_tmux_option "@tmux-dotbar-bold-current-window" false)
+rounded=$(get_tmux_option "@tmux-dotbar-rounded" false)
 status=$(get_tmux_option "@tmux-dotbar-position" "bottom")
 justify=$(get_tmux_option "@tmux-dotbar-justify" "absolute-centre")
 left_state=$(get_tmux_option "@tmux-dotbar-left" true)
@@ -31,7 +32,15 @@ time_text=$(get_tmux_option "@tmux-dotbar-status-right-text" " %H:%M ")
 bold_attr="bold"
 [ "$bold_status" = true ] && bold_attr="nobold"
 
-session_component="#[bg=$bg,fg=$fg_session]#{?client_prefix,,$session_text}#[bg=$fg_prefix,fg=$bg,$bold_attr]#{?client_prefix,$session_text,}#[bg=$bg,fg=${fg_session}]"
+if [ "$rounded" = "true" ]; then
+  edge_left=$'\ue0b6'
+  edge_right=$'\ue0b4'
+  # Trim 1 char from each side so edge glyphs replace the padding, keeping width stable
+  session_text_inner="${session_text:1:-1}"
+  session_component="#[bg=$bg,fg=$fg_session]#{?client_prefix,#[fg=$fg_prefix]$edge_left,$session_text}#[bg=$fg_prefix,fg=$bg,$bold_attr]#{?client_prefix,$session_text_inner,}#[bg=$bg,fg=${fg_session}]#{?client_prefix,#[fg=$fg_prefix]$edge_right,}"
+else
+  session_component="#[bg=$bg,fg=$fg_session]#{?client_prefix,,$session_text}#[bg=$fg_prefix,fg=$bg,$bold_attr]#{?client_prefix,$session_text,}#[bg=$bg,fg=${fg_session}]"
+fi
 time_component="#[bg=$bg,fg=$fg_session]$time_text#[bg=$bg,fg=${fg_session}]"
 
 # Build Default Status Strings
