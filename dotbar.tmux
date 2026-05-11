@@ -18,7 +18,7 @@ fg_prefix=$(get_tmux_option "@tmux-dotbar-fg-prefix" '#95E6CB')
 # Options
 bold_status=$(get_tmux_option "@tmux-dotbar-bold-status" false)
 bold_current_window=$(get_tmux_option "@tmux-dotbar-bold-current-window" false)
-rounded=$(get_tmux_option "@tmux-dotbar-rounded" false)
+rounded=$(get_tmux_option "@tmux-dotbar-rounded" true)
 status=$(get_tmux_option "@tmux-dotbar-position" "bottom")
 justify=$(get_tmux_option "@tmux-dotbar-justify" "absolute-centre")
 left_state=$(get_tmux_option "@tmux-dotbar-left" true)
@@ -33,10 +33,15 @@ bold_attr="bold"
 [ "$bold_status" = true ] && bold_attr="nobold"
 
 if [ "$rounded" = "true" ]; then
-  edge_left=$'\ue0b6'
-  edge_right=$'\ue0b4'
-  # Trim 1 char from each side so edge glyphs replace the padding, keeping width stable
-  session_text_inner="${session_text:1:-1}"
+  edge_left=''
+  edge_right=''
+  # Trim 1 char from each side so edge glyphs replace the padding, keeping width stable.
+  # Bash does not allow negative substring lengths, so compute a safe explicit length.
+  if [ "${#session_text}" -gt 2 ]; then
+    session_text_inner="${session_text:1:${#session_text}-2}"
+  else
+    session_text_inner="$session_text"
+  fi
   session_component="#[bg=$bg,fg=$fg_session]#{?client_prefix,#[fg=$fg_prefix]$edge_left,$session_text}#[bg=$fg_prefix,fg=$bg,$bold_attr]#{?client_prefix,$session_text_inner,}#[bg=$bg,fg=${fg_session}]#{?client_prefix,#[fg=$fg_prefix]$edge_right,}"
 else
   session_component="#[bg=$bg,fg=$fg_session]#{?client_prefix,,$session_text}#[bg=$fg_prefix,fg=$bg,$bold_attr]#{?client_prefix,$session_text,}#[bg=$bg,fg=${fg_session}]"
