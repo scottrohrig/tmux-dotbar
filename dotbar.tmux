@@ -15,6 +15,7 @@ fg_current=$(get_tmux_option "@tmux-dotbar-fg-current" '#BFBDB6')
 fg_session=$(get_tmux_option "@tmux-dotbar-fg-session" '#565B66')
 fg_prefix=$(get_tmux_option "@tmux-dotbar-fg-prefix" '#95E6CB')
 fg_zoom=$(get_tmux_option "@tmux-dotbar-fg-zoom" '#39BAE6')
+fg_bell=$(get_tmux_option "@tmux-dotbar-fg-bell" '#0B0E14')
 
 # Options
 bold_status=$(get_tmux_option "@tmux-dotbar-bold-status" false)
@@ -99,8 +100,8 @@ status_style="bg=${bg},fg=${fg}"
 [ "$bold_status" = true ] && status_style="$status_style,bold"
 tmux set-option -g status-style "$status_style"
 
-tmux set-option -g window-status-bell-style "bg=${fg_prefix},fg=${bg},bold"
-tmux set-option -g window-status-activity-style "bg=${fg_current},fg=${bg}"
+tmux set-option -g window-status-bell-style "bg=${fg_prefix},fg=${fg_bell},bold"
+tmux set-option -g window-status-activity-style "bg=${fg_current},fg=${fg_bell}"
 
 current_format="#[bg=${bg},fg=${fg_current}]${window_status_format}#[fg=${fg_zoom},bg=${bg}]#{?window_zoomed_flag,${maximized_pane_icon},}#[fg=${bg},bg=default]"
 [ "$bold_current_window" = true ] && current_format="#[bg=${bg},fg=${fg_current},bold]${window_status_format}#[fg=${fg_zoom},bg=${bg}]#{?window_zoomed_flag,${maximized_pane_icon},}#[fg=${bg},bg=default]"
